@@ -133,3 +133,9 @@ Then configure `alembic.ini` and `env.py` to point to your `DATABASE_URL`.
   to avoid deprecated `on_event` usage.
 - Security tokens use timezone-aware datetimes (`datetime.now(datetime.UTC)`)
   instead of `datetime.utcnow()`.
+
+## Credits & Contact
+
+- Project by Isaiah Kimoban.
+- Email: <isaiahkimoban87@gmail.com>
+- LinkedIn: <https://www.linkedin.com/kimoban>
