@@ -25,6 +25,14 @@ uvicorn app.main:app --reload
 
 The API will be available at <http://localhost:8000>
 
+### Docker
+
+```bash
+docker-compose up --build
+```
+
+This brings up Postgres and the app. The app will attempt to run Alembic upgrades on start.
+
 ## Project Structure
 
 ```text
@@ -108,13 +116,15 @@ Notes:
 
 ## Environment
 
-Configuration via `.env`:
+Configuration via `.env` (see `.env.example`):
 
 ```env
 SECRET_KEY=devsecret
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=60
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/fastapi_db
+AUTO_CREATE_DB=false
+ALLOWED_ORIGINS=["http://localhost:3000"]
 ```
 
 PostgreSQL setup (local example):
@@ -132,18 +142,20 @@ Notes:
 
 ## Migrations (Alembic)
 
-Alembic folder is scaffolded. Initialize if you plan migrations:
+Alembic is wired to your ORM models. Generate the initial migration and upgrade:
 
 ```bash
-alembic init alembic
+alembic revision --autogenerate -m "initial"
+alembic upgrade head
 ```
 
-Then configure `alembic.ini` and `env.py` to point to your `DATABASE_URL` (e.g., `postgresql://...`).
+Ensure `DATABASE_URL` is set in your environment or `.env`.
 
 ## Deprecation Hygiene
 
 - Startup events were replaced with immediate table creation in the app factory
-  to avoid deprecated `on_event` usage.
+  to avoid deprecated `on_event` usage. In production, set `AUTO_CREATE_DB=false`
+  and manage schema via Alembic migrations.
 - Security tokens use timezone-aware datetimes (`datetime.now(datetime.UTC)`)
   instead of `datetime.utcnow()`.
 
