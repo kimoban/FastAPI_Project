@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.env
+.venv/
+env/
+.build/
+dist/
+app.db
+alembic.ini
+alembic/versions/
+*.sqlite
+*.db
