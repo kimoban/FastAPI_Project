@@ -1,6 +1,6 @@
 # FastAPI Project
 
-A minimal FastAPI application with versioned API, JWT auth, SQLite DB, and tests.
+A minimal FastAPI application with versioned API, JWT auth, PostgreSQL (runtime) with SQLite for tests, and tests.
 
 ## Quick Start
 
@@ -114,8 +114,21 @@ Configuration via `.env`:
 SECRET_KEY=devsecret
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=60
-DATABASE_URL=sqlite:///./app.db
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/fastapi_db
 ```
+
+PostgreSQL setup (local example):
+
+```bash
+# Ensure PostgreSQL is installed and running
+# Create a database for the app
+psql -U postgres -h localhost -c "CREATE DATABASE fastapi_db;"
+```
+
+Notes:
+
+- The app uses PostgreSQL by default via `DATABASE_URL`.
+- Tests run against an isolated SQLite `test.db` automatically under pytest for determinism.
 
 ## Migrations (Alembic)
 
@@ -125,7 +138,7 @@ Alembic folder is scaffolded. Initialize if you plan migrations:
 alembic init alembic
 ```
 
-Then configure `alembic.ini` and `env.py` to point to your `DATABASE_URL`.
+Then configure `alembic.ini` and `env.py` to point to your `DATABASE_URL` (e.g., `postgresql://...`).
 
 ## Deprecation Hygiene
 
