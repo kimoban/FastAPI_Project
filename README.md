@@ -82,6 +82,7 @@ python -m pytest -q
 ```
 
 Notes:
+
 - Tables are auto-created at app startup.
 - During tests, the schema is reset automatically to ensure clean runs.
 - Requirements include `email-validator` and pinned `bcrypt==4.0.1` for passlib compatibility.
