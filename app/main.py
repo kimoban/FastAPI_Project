@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import logging
+from pythonjsonlogger import jsonlogger
 from app.api.v1.router import api_router
 from app.middleware.logging import LoggingMiddleware
 from app.db.session import engine
@@ -18,6 +20,14 @@ from app.services.product_service import seed_default_products
 def create_app() -> FastAPI:
     settings = get_settings()
     app = FastAPI(title="FastAPI Project", version="1.0.0")
+    # Configure JSON logging
+    logger = logging.getLogger()
+    logger.handlers = []
+    handler = logging.StreamHandler()
+    formatter = jsonlogger.JsonFormatter("%(asctime)s %(levelname)s %(name)s %(message)s")
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    logger.setLevel(logging.INFO)
     app.add_middleware(LoggingMiddleware)
     # CORS configuration
     app.add_middleware(
