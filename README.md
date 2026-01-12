@@ -138,4 +138,4 @@ Then configure `alembic.ini` and `env.py` to point to your `DATABASE_URL`.
 
 - Project by Isaiah Kimoban.
 - Email: <isaiahkimoban87@gmail.com>
-- LinkedIn: <https://www.linkedin.com/kimoban>
+- LinkedIn: <https://www.linkedin.com/in/kimoban/>
