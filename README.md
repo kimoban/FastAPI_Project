@@ -11,23 +11,23 @@ python -m venv .venv
 .\.venv\Scripts\activate
 ```
 
-2. Install dependencies:
+1. Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Run the app:
+1. Run the app:
 
 ```bash
 uvicorn app.main:app --reload
 ```
 
-The API will be available at http://localhost:8000
+The API will be available at <http://localhost:8000>
 
 ## Project Structure
 
-```
+```text
 FastAPI Project/
 ├── README.md
 ├── requirements.txt
@@ -62,15 +62,16 @@ FastAPI Project/
 │       ├── item_service.py
 │       └── user_service.py
 └── tests/
-	├── test_auth.py
-	└── test_users.py
+    ├── test_auth.py
+    └── test_users.py
 ```
 
 ## API Overview
 
 - POST `/api/v1/users/` – Register a user
 - POST `/api/v1/auth/login` – Login, returns JWT
-- GET `/api/v1/users/me` – Get current user (requires `Authorization: Bearer <token>`) 
+- GET `/api/v1/users/me` – Get current user
+  - Requires header: `Authorization: Bearer <token>`
 - POST `/api/v1/items/` – Create item (auth required)
 - GET `/api/v1/items/` – List items (auth required)
 
@@ -89,7 +90,7 @@ Notes:
 
 Configuration via `.env`:
 
-```
+```env
 SECRET_KEY=devsecret
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=60
@@ -108,5 +109,7 @@ Then configure `alembic.ini` and `env.py` to point to your `DATABASE_URL`.
 
 ## Deprecation Hygiene
 
-- Startup events were replaced with immediate table creation in the app factory to avoid deprecated `on_event` usage.
-- Security tokens use timezone-aware datetimes (`datetime.now(datetime.UTC)`) instead of `datetime.utcnow()`.
+- Startup events were replaced with immediate table creation in the app factory
+  to avoid deprecated `on_event` usage.
+- Security tokens use timezone-aware datetimes (`datetime.now(datetime.UTC)`)
+  instead of `datetime.utcnow()`.
