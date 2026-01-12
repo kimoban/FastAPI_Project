@@ -25,6 +25,47 @@ uvicorn app.main:app --reload
 
 The API will be available at http://localhost:8000
 
+## Project Structure
+
+```
+FastAPI Project/
+├── README.md
+├── requirements.txt
+├── alembic/
+│   └── README.md
+├── app/
+│   ├── main.py
+│   ├── api/
+│   │   └── v1/
+│   │       ├── router.py
+│   │       └── endpoints/
+│   │           ├── auth.py
+│   │           ├── items.py
+│   │           └── users.py
+│   ├── core/
+│   │   ├── config.py
+│   │   └── security.py
+│   ├── db/
+│   │   ├── base.py
+│   │   └── session.py
+│   ├── dependencies/
+│   │   └── get_db.py
+│   ├── middleware/
+│   │   └── logging.py
+│   ├── models/
+│   │   ├── item.py
+│   │   └── user.py
+│   ├── schemas/
+│   │   ├── item.py
+│   │   └── user.py
+│   └── services/
+│       ├── item_service.py
+│       └── user_service.py
+└── tests/
+	├── test_auth.py
+	└── test_users.py
+```
+
 ## API Overview
 
 - POST `/api/v1/users/` – Register a user
