@@ -29,41 +29,60 @@ The API will be available at <http://localhost:8000>
 
 ```text
 FastAPI Project/
-├── README.md
-├── requirements.txt
+├── README.md                    # Documentation: quick start, API, structure
+├── requirements.txt             # Python deps (FastAPI, SQLAlchemy, passlib, ...)
 ├── alembic/
-│   └── README.md
-├── app/
-│   ├── main.py
+│   └── README.md                # Notes for configuring migrations later
+├── app/                         # FastAPI application source
+│   ├── main.py                  # App factory: adds middleware, includes v1 router,
+│   │                             # creates tables, seeds default products if empty.
 │   ├── api/
 │   │   └── v1/
-│   │       ├── router.py
+│   │       ├── router.py        # Aggregates endpoints under /api/v1.
 │   │       └── endpoints/
-│   │           ├── auth.py
-│   │           ├── items.py
-│   │           └── users.py
+│   │           ├── auth.py      # POST /auth/login issues JWT for email+password.
+│   │           ├── users.py     # POST /users registers; GET /users/me returns
+│   │                             # current profile.
+│   │           ├── items.py     # Auth-required item create/list examples.
+│   │           ├── products.py  # List insurance products; basis to purchase.
+│   │           ├── policies.py  # Create/view policies linked to users/products.
+│   │           ├── claims.py    # File claims and fetch status; supports
+│   │                             # real-time checks.
+│   │           └── advisory.py  # Advisory: tailored tips from profile & claims.
 │   ├── core/
-│   │   ├── config.py
-│   │   └── security.py
+│   │   ├── config.py            # Pydantic settings from env (.env), e.g., DB URL.
+│   │   └── security.py          # Bcrypt hashing, JWT create/decode, OAuth2.
+│   │                             # Provides get_current_user for protected routes.
 │   ├── db/
-│   │   ├── base.py
-│   │   └── session.py
+│   │   ├── base.py              # SQLAlchemy Base for ORM models.
+│   │   └── session.py           # Engine & SessionLocal; switches to test.db under
+│   │                             # pytest for clean runs.
 │   ├── dependencies/
-│   │   └── get_db.py
+│   │   └── get_db.py            # Yields a per-request DB session; closes on finish.
 │   ├── middleware/
-│   │   └── logging.py
+│   │   └── logging.py           # Adds X-Process-Time-ms header for basic tracing.
 │   ├── models/
-│   │   ├── item.py
-│   │   └── user.py
+│   │   ├── user.py              # User: email, hashed_password, is_active, items.
+│   │   ├── item.py              # Item: title, description, owner relationship.
+│   │   ├── product.py           # Product: name, description; seeds defaults.
+│   │   ├── policy.py            # Policy: links user↔product; stores status & dates.
+│   │   └── claim.py             # Claim: references policy; tracks state & details.
 │   ├── schemas/
-│   │   ├── item.py
-│   │   └── user.py
+│   │   ├── user.py              # Pydantic: UserCreate/UserRead models.
+│   │   ├── item.py              # Pydantic: ItemCreate/ItemRead models.
+│   │   ├── product.py           # Pydantic: ProductRead (+ inputs when purchasing).
+│   │   ├── policy.py            # Pydantic: PolicyCreate/PolicyRead.
+│   │   └── claim.py             # Pydantic: ClaimCreate/ClaimRead.
 │   └── services/
-│       ├── item_service.py
-│       └── user_service.py
+│       ├── user_service.py      # User persistence & auth helpers (hash/verify).
+│       ├── item_service.py      # Item CRUD with owner checks.
+│       ├── product_service.py   # Product queries; seed_default_products helper.
+│       ├── policy_service.py    # Issue/cancel policy; associate to user & product.
+│       ├── claim_service.py     # Open/update claim; status progression utilities.
+│       └── advisory_service.py  # Compute advisory output from user, policy, claims.
 └── tests/
-    ├── test_auth.py
-    └── test_users.py
+  ├── test_auth.py             # Verifies login rejects bad creds; token issuance.
+  └── test_users.py            # Register user; login; fetch /users/me with token.
 ```
 
 ## API Overview
