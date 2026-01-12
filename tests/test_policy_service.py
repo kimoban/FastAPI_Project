@@ -1,6 +1,7 @@
 from app.db.session import SessionLocal, engine
 from app.db.base import Base
 from app.models.user import User
+from app.models.product import PolicyProduct
 from app.services.product_service import list_products
 from app.services.policy_service import (
     compute_premium,
@@ -16,11 +17,14 @@ def setup_module(module):
 
 
 def test_compute_premium_rules():
-    # Use a simple product-like object with base_premium attribute
-    class P:
-        base_premium = 100
-
-    p = P()
+    # Use a real PolicyProduct instance to satisfy type-checking
+    p = PolicyProduct(
+        name="Test Product",
+        description=None,
+        base_premium=100,
+        coverage_limit=1000,
+        risk_factor=1.0,
+    )
     assert compute_premium(p) == 100
     assert compute_premium(p, age=20) == 120
     assert compute_premium(p, age=65) == 110
