@@ -21,4 +21,4 @@ COPY alembic.ini /app/
 COPY README.md /app/
 
 # Entrypoint runs migrations then starts server
-CMD ["bash", "-lc", "alembic upgrade head || true; uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+CMD ["bash", "-lc", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 4"]
