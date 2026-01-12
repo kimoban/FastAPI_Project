@@ -21,11 +21,15 @@ def create_app() -> FastAPI:
     # Ensure tables exist even when TestClient doesn't trigger lifespan events
     Base.metadata.create_all(bind=engine)
     # Seed default products in development/test if none exist
+    db = None
     try:
         db = SessionLocal()
         seed_default_products(db)
     finally:
-        db.close()
+        if db is not None:
+            db.close()
+
+    return app
 
     return app
 
