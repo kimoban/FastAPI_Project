@@ -6,6 +6,11 @@ from app.db.base import Base
 # Ensure models are imported so metadata includes them
 from app.models import user as user_model  # noqa: F401
 from app.models import item as item_model  # noqa: F401
+from app.models import product as product_model  # noqa: F401
+from app.models import policy as policy_model  # noqa: F401
+from app.models import claim as claim_model  # noqa: F401
+from app.db.session import SessionLocal
+from app.services.product_service import seed_default_products
 
 
 def create_app() -> FastAPI:
@@ -15,6 +20,12 @@ def create_app() -> FastAPI:
 
     # Ensure tables exist even when TestClient doesn't trigger lifespan events
     Base.metadata.create_all(bind=engine)
+    # Seed default products in development/test if none exist
+    try:
+        db = SessionLocal()
+        seed_default_products(db)
+    finally:
+        db.close()
 
     return app
 
