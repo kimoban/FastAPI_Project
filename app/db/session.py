@@ -9,12 +9,17 @@ settings = get_settings()
 
 database_url = settings.database_url
 if (os.getenv("PYTEST_CURRENT_TEST") is not None) or ("pytest" in sys.modules):
-	# Use an isolated test database file and reset it each run
-	database_url = "sqlite:///./test.db"
-	try:
-		os.remove("test.db")
-	except FileNotFoundError:
-		pass
+	# Allow overriding test DB via environment; fall back to isolated SQLite.
+	_test_url = os.getenv("TEST_DATABASE_URL")
+	if _test_url:
+		database_url = _test_url
+	else:
+		# Use an isolated test database file and reset it each run
+		database_url = "sqlite:///./test.db"
+		try:
+			os.remove("test.db")
+		except FileNotFoundError:
+			pass
 
 connect_args = {"check_same_thread": False} if database_url.startswith("sqlite") else {}
 engine = create_engine(database_url, future=True, connect_args=connect_args)
