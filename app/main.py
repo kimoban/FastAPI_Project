@@ -1,6 +1,6 @@
+import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import logging
 from pythonjsonlogger import jsonlogger
 from app.api.v1.router import api_router
 from app.middleware.logging import LoggingMiddleware
