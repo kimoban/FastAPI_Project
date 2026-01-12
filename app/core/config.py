@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     secret_key: str = Field(default="change_me", validation_alias="SECRET_KEY")
     algorithm: str = Field(default="HS256", validation_alias="ALGORITHM")
     access_token_expire_minutes: int = Field(default=60, validation_alias="ACCESS_TOKEN_EXPIRE_MINUTES")
+    allowed_origins: list[str] = Field(default=["*"], validation_alias="ALLOWED_ORIGINS")
+    auto_create_db: bool = Field(default=True, validation_alias="AUTO_CREATE_DB")
 
 
 @lru_cache
